@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: alert-api
+  kafka:
+    bootstrap-servers: ${kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    redis:
+        host:  ${redis.host}
+        port: ${redis.port}

@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: price-producer
+  kafka:
+    bootstrap-servers: ${kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topic:
+      stock:
+        price: ${kafka.topic.stock.price}
+
+stock-api:
+  base-url: wss://ws.finnhub.io?token=${stock-api.api-key}
+
+server:
+  port: 8082

@@ -1,0 +1,53 @@
+# Maven build
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/ # Ensure module source not ignored
+!.idea/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Spring Boot local config
+**/src/main/resources/application-local.yaml
+
+# Logs
+*.log
+logs/
+*.stdout
+*.stderr
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+!.env.example
+
+
+# Temporary files
+*~
+*.swp
+*.swo
+*.tmp
+
+# Java
+*.class
+
+

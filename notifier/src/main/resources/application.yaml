@@ -1,0 +1,62 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: notifier
+  kafka:
+    bootstrap-servers: ${kafka.bootstrap-servers}
+    topic:
+      trigger-alert: ${kafka.topic.trigger-alert}
+      dlq:
+        alert: ${kafka.topic.dlq.alert}
+        max-attempt: ${kafka.topic.dlq.max-attempt}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    streams:
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
+      session.timeout.ms: 10000
+      heartbeat.interval.ms: 3000
+      max.poll.interval.ms: 30000
+
+  mail:
+    host: ${mail.host}
+    username: ${mail.username}
+    password: ${mail.password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    redis:
+      host: ${redis.host}
+      port: ${redis.port}
+
+server:
+    port: 8087
+
+twilio:
+  account-sid: ${twilio.account-sid}
+  auth-token: ${twilio.auth-token}
+  whatsapp:
+    from: ${twilio.whatsapp.from}
+
+
+alert:
+  strategy: EMAIL_NOTIFIER
