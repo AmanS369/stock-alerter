@@ -13,7 +13,7 @@ public class AlertController {
 
     private final AlertService alertService;
     @PostMapping("/create-alert")
-    public ResponseEntity<String> createTask(@RequestBody CreateAlertDto alertDto) {
+    public ResponseEntity<String> createTask(@equestBody CreateAlertDto alertDto) {
         alertService.createAlert(alertDto);
         return ResponseEntity.ok("DOne");
     }
