@@ -23,10 +23,20 @@ jobs:
             exit 0
           fi
 
-          if [[ "$BRANCH" =~ ^alert-api/(feature|develop|release)/.*$ ]]; then
-            echo "Branch naming valid"
-            exit 0
+          # Valid: feature/alert-api/*
+          if [[ "$BRANCH" =~ ^feature/alert-api/.*$ ]]; then
+             echo "Branch naming valid (feature)"
+             exit 0
           fi
+          if [[ "$BRANCH" =~ ^release/alert-api/.*$ ]]; then
+             echo "Branch naming valid (feature)"
+             exit 0
+          fi
+
+          if [[ "$BRANCH" == "develop_alertApi" ]]; then
+             echo "Branch naming valid (feature)"
+             exit 0
+          fi         
 
           echo "❌ INVALID branch name!"
           exit 1
