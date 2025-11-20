@@ -15,14 +15,13 @@ public class AlertService {
 
     private final AlertRepository alertRepository;
     private final RedisService redisService;
-    private final Long userID = 1L;
     @Transactional
     public void createAlert(CreateAlertDto createAlertDto){
 
         Alert newAlert = Alert.builder()
                 .symbol(createAlertDto.getSymbol())
                 .status("ACTIVE")
-                .userId(userID)
+                .userId(createAlertDto.getUserId())
                 .targetPrice(createAlertDto.getPrice())
                 .condition(createAlertDto.getCondition())
                 .createdAt(LocalDateTime.now())
