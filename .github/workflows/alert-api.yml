@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - "main"
-      - "alert-api/develop"
-      - "alert-api/feature/*"
-      - "alert-api/release/*"
+      - "develop_alertApi"
+      - "feature/alert-api/*"
+      - "release/alert-api/*"
 
 jobs:
 
