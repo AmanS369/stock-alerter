@@ -1,0 +1,73 @@
+name: Alert API CI/CD
+
+on:
+  push:
+    branches:
+      - "main"
+      - "alert-api/develop"
+      - "alert-api/feature/*"
+      - "alert-api/release/*"
+
+jobs:
+
+  validate-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch naming convention
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Branch name: $BRANCH"
+
+          if [[ "$BRANCH" == "main" ]]; then
+            echo "Main branch allowed"
+            exit 0
+          fi
+
+          if [[ "$BRANCH" =~ ^alert-api/(feature|develop|release)/.*$ ]]; then
+            echo "Branch naming valid"
+            exit 0
+          fi
+
+          echo "❌ INVALID branch name!"
+          exit 1
+
+  build:
+    runs-on: ubuntu-latest
+    needs: validate-branch
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build alert-api
+        run: mvn -pl alert-api -am clean package -DskipTests
+
+  deploy:
+    if: startsWith(github.ref, 'refs/heads/alert-api/release/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/alert-api:latest ./alert-api
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/alert-api:latest
+
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
