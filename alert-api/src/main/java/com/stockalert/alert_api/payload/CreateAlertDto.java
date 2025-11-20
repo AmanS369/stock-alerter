@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateAlertDto {
-
+    private Long userId;
     private double price;
     private String symbol;
     private String condition;
