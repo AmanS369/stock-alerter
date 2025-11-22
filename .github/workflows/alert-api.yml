@@ -57,7 +57,7 @@ jobs:
         run: mvn -pl alert-api -am clean package -DskipTests
 
   deploy:
-    if: startsWith(github.ref, 'refs/heads/alert-api/release/')
+    if: startsWith(github.ref, 'refs/heads/release/alert-api/')
     needs: build
     runs-on: ubuntu-latest
     steps:
