@@ -1,6 +1,7 @@
 package com.stockalert.alert_api.service;
 
 import com.stockalert.alert_api.payload.AlertDto;
+import com.stockalert.alert_api.payload.ApiDto;
 import com.stockalert.entity.Alert;
 import com.stockalert.alert_api.payload.CreateAlertDto;
 import com.stockalert.repository.AlertRepository;
@@ -35,7 +36,7 @@ public class AlertService {
 
     }
 
-    public List<AlertDto> getAllAlert(){
+    public ApiDto getAllAlert(){
         List<Alert> allAlert = alertRepository.findAll();
         List<AlertDto> alertDtoList = new ArrayList<>();
         allAlert.forEach(alert->{
@@ -49,7 +50,10 @@ public class AlertService {
                     .build());
         });
 
-        return alertDtoList;
+        return ApiDto.builder()
+                .alertDtoList(alertDtoList)
+                .message("Data fetched successfully")
+                .build();
     }
 
 

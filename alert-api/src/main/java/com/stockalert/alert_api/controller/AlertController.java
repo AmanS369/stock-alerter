@@ -1,9 +1,11 @@
 package com.stockalert.alert_api.controller;
 
 import com.stockalert.alert_api.payload.AlertDto;
+import com.stockalert.alert_api.payload.ApiDto;
 import com.stockalert.alert_api.payload.CreateAlertDto;
 import com.stockalert.alert_api.service.AlertService;
 import lombok.AllArgsConstructor;
+import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,8 @@ public class AlertController {
     }
 
     @GetMapping("/alert")
-    public ResponseEntity<List<AlertDto>> getAlert() {
-        List<AlertDto> savedAlert = alertService.getAllAlert();
-        return ResponseEntity.ok(savedAlert);
+    public ResponseEntity<ApiDto> getAlert() {
+        return ResponseEntity.ok(alertService.getAllAlert());
     }
 
 }
