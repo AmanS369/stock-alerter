@@ -64,8 +64,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Render Deploy
-        run: |
-          curl -X POST \
-          -H "Accept: application/json" \
-          "https://api.render.com/deploy/${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_DEPLOY_KEY }}"
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          scripts:
+            cd ..
+            cd opt/services
+            docker compose pull
+            docker compose up -d
+
