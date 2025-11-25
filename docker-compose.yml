@@ -95,3 +95,8 @@ volumes:
     postgres-data:
     redis-data:
     pgadmin-data:
+
+networks:
+  default:
+    external: true
+    name: stock-network

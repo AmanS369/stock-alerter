@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j// generates constructor for final fields
 public class StockKafkaProducer {
 
-    @Value("${kafka.topic.stock.price}")
+    @Value("${spring.kafka.topic.stock.price}")
     private String stockPriceTopic;
 
     private final KafkaTemplate<String, StockPriceDto> kafkaTemplate;
