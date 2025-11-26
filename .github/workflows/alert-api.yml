@@ -1,0 +1,78 @@
+name: Alert API CI/CD
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop_alertApi"
+      - "feature/alert-api/*"
+      - "release/alert-api/*"
+
+jobs:
+
+  validate-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch naming convention
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Branch name: $BRANCH"
+
+          if [[ "$BRANCH" == "main" ]]; then exit 0; fi
+          if [[ "$BRANCH" =~ ^feature/alert-api/.*$ ]]; then exit 0; fi
+          if [[ "$BRANCH" =~ ^release/alert-api/.*$ ]]; then exit 0; fi
+          if [[ "$BRANCH" == "develop_alertApi" ]]; then exit 0; fi
+
+          echo "❌ INVALID branch name!"
+          exit 1
+
+  build:
+    needs: validate-branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR
+        run: mvn -pl alert-api -am clean package -DskipTests
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/alert-api:latest ./alert-api
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/alert-api:latest
+
+      - name: Upload Built JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: alert-api-jar
+          path: alert-api/target/*.jar
+
+  deploy:
+    if: startsWith(github.ref, 'refs/heads/release/alert-api/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            echo "Inside VM"
+            cd ..
+            cd opt/services
+            ./deploy.sh
+
