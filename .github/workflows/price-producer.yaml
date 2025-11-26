@@ -1,4 +1,4 @@
-name: Alert API CI/CD
+name: Price Producer CI/CD
 
 on:
   push:
