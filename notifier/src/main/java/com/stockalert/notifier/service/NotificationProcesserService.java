@@ -26,7 +26,7 @@ public class NotificationProcesserService {
 
 
         } catch (Exception e) {
-            log.error("Failed to send WhatsApp notification", e);
+            log.error("Failed to send notification", e);
         }
     }
 }
