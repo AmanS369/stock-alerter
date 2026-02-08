@@ -210,7 +210,7 @@ This ensures:
 
 ---
 
-### Why Lua 
+### Why Lua (Summarized)
 
 * Atomicity: read + logic + write = one indivisible operation
 * Performance: runs inside Redis, no client round-trip
