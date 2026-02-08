@@ -210,7 +210,7 @@ This ensures:
 
 ---
 
-### Why Lua — Summarized
+### Why Lua 
 
 * Atomicity: read + logic + write = one indivisible operation
 * Performance: runs inside Redis, no client round-trip
@@ -222,11 +222,3 @@ Lua scripting makes Redis act like a tiny **transaction processor** tuned for co
 
 ---
 
-## 🧭 Roadmap
-
-* Add Postgres persistence
-* Add stock history cache (Redis)
-* Deploy to Kubernetes
-* Add real-time WebSocket UI
-
----
